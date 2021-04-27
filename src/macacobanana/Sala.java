@@ -115,7 +115,6 @@ public class Sala {
             //Movimentar()
             //tenta cima()
             if ((linha - 1 != 0)) {
-                System.out.println("Dentro CIMA");
                 //ver se o de cima nao eh igual ao anterior
                 if (linha - 1 != macaco.getLinhaAnterior()) {
                     //tenta mudar para cima verificando se o lugar esta vazio
@@ -124,6 +123,7 @@ public class Sala {
                         ambiente[linha - 1][coluna] = macaco;
                         ambiente[linha][coluna] = null;
                         macaco.setPosicaoLinha(linha - 1);
+                        System.out.println("Foi para cima");
                         
                         System.out.println("");
                         System.out.println("===Nova posicao===");
@@ -150,7 +150,7 @@ public class Sala {
             if (linha + 1 <= 4) {
                 linha = macaco.getPosicaoLinha();
                 coluna = macaco.getPosicaoColuna();
-
+                
                 macaco.setColunaAnterior(coluna);
                 macaco.setLinhaAnterior(linha);
 
@@ -160,6 +160,7 @@ public class Sala {
                     if (ambiente[linha + 1][coluna] == null) {
                         ambiente[linha + 1][coluna] = macaco;
                         ambiente[linha][coluna] = null;
+                        System.out.println("Linha: "+ linha);
                         macaco.setPosicaoLinha(linha + 1);
                         
                         System.out.println("");
@@ -168,7 +169,6 @@ public class Sala {
                         System.out.println("");
 
                     } else {
-                        //caso nao esteja vazio, ver o que tem e pegar
                         //caso nao esteja vazio, ver o que tem e pegar
                         if (ambiente[linha + 1][coluna].toString() == "CADEIRA") {
                             macaco.setCadeira(cadeira);
@@ -183,6 +183,40 @@ public class Sala {
             }else{
                 System.out.println("Não pode ir para baixo");
             }
+            
+            //tentar esquerda()
+                //so vai a esquerda se nao estiver na coluna 0
+                    if(macaco.getPosicaoColuna() != 0){
+                        linha = macaco.getPosicaoLinha();
+                        coluna = macaco.getPosicaoColuna();
+                        
+                        macaco.setColunaAnterior(coluna);
+                        macaco.setLinhaAnterior(linha);
+                        
+                        //verificar se a proxima coluna eh diferente da anterior
+                        if((coluna - 1) != coluna){
+                            //tenta ir a coluna verificando se esta vazia
+                            if(ambiente[linha][coluna -1] == null){
+                                ambiente[linha][coluna - 1] = macaco;
+                                macaco.setPosicaoColuna(coluna - 1);
+                                ambiente[linha][coluna] = null;
+                                System.out.println("Foi para esquerda");
+
+                            }else{
+                                //caso nao esteja vazio, ver o que tem e pegar
+                                if(ambiente[linha][coluna -1].toString() == "CADEIRA"){
+                                    macaco.setCadeira(cadeira);
+                                }else{
+                                    macaco.setVara(vara);
+                                }
+                                if (goal()) {
+                                    System.out.println("Objetivo alcancado");
+                                }
+                            }
+                        }
+                    }else{
+                        System.out.println("Nao pode ir a esquerda");
+                    }
 
         }
     }
