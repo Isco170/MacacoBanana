@@ -194,13 +194,17 @@ public class Sala {
                         macaco.setLinhaAnterior(linha);
                         
                         //verificar se a proxima coluna eh diferente da anterior
-                        if((coluna - 1) != coluna){
+                        if((coluna - 1) != macaco.getColunaAnterior()){
                             //tenta ir a coluna verificando se esta vazia
                             if(ambiente[linha][coluna -1] == null){
                                 ambiente[linha][coluna - 1] = macaco;
                                 macaco.setPosicaoColuna(coluna - 1);
                                 ambiente[linha][coluna] = null;
+                                
                                 System.out.println("Foi para esquerda");
+                                System.out.println("===Nova posicao===");
+                                System.out.println("");
+                                ambiente();
 
                             }else{
                                 //caso nao esteja vazio, ver o que tem e pegar
@@ -216,6 +220,43 @@ public class Sala {
                         }
                     }else{
                         System.out.println("Nao pode ir a esquerda");
+                    }
+            //tentar direita()
+                //so va a direita se nao estiver na coluna 4
+                    if(macaco.getPosicaoColuna() != 4){
+                        linha = macaco.getPosicaoLinha();
+                        coluna = macaco.getPosicaoColuna();
+                        
+                        macaco.setColunaAnterior(coluna);
+                        macaco.setLinhaAnterior(linha);
+                        //verificar se a proxima coluna eh diferente da anterior
+                        if(coluna + 1 != macaco.getColunaAnterior()){
+                            //tenta ir verificando se esta vazia
+                            if(ambiente[linha][coluna + 1] == null){
+                                ambiente[linha][coluna + 1] = macaco;
+                                macaco.setPosicaoColuna(coluna + 1);
+                                ambiente[linha][coluna] = null;
+                                
+                                System.out.println("Foi para direita");
+                                System.out.println("===Nova posicao===");
+                                System.out.println("");
+                                ambiente();
+                            }else{
+                                //caso nao esteja vazio, ver o que tem e pegar
+                                if(ambiente[linha][coluna + 1].toString() == "CADEIRA"){
+                                    macaco.setCadeira(cadeira);
+                                }else{
+                                    macaco.setVara(vara);
+                                }
+                                
+                                if(goal()){
+                                    System.out.println("Objetivo alcancado");
+                                }
+                            }
+                        }
+                        
+                    }else{
+                        System.out.println("Nao pode ir a direita");
                     }
 
         }
