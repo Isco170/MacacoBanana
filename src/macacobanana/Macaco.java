@@ -4,6 +4,7 @@ public class Macaco {
     private String descricao;
     private int posicaoLinha;
     private int posicaoColuna;
+    private boolean cadeiraPosicao;
     
     private int linhaAnterior;
     private int colunaAnterior;
@@ -80,6 +81,16 @@ public class Macaco {
     public Cadeira getCadeira() {
         return cadeira;
     }
+
+    public boolean isCadeiraPosicao() {
+        return cadeiraPosicao;
+    }
+
+    public void setCadeiraPosicao(boolean cadeiraPosicao) {
+        this.cadeiraPosicao = cadeiraPosicao;
+    }
+    
+    
 
     public void setCadeira(Cadeira cadeira) {
         this.cadeira = cadeira;
