@@ -10,6 +10,7 @@ public class Sala {
     private Cadeira cadeira;
     private Vara vara;
     private Banana banana;
+    boolean sucesso = false;
 
     private final Object[][] ambiente = new Object[5][5];
     Random r = new Random();
@@ -86,7 +87,9 @@ public class Sala {
     }
 
     //Movimentos
-    public void cima() {
+    public boolean cima() {
+        boolean retorno = true;
+
         int linha = macaco.getPosicaoLinha();
         int coluna = macaco.getPosicaoColuna();
 
@@ -101,9 +104,9 @@ public class Sala {
                 if (ambiente[linha - 1][coluna] == null) {
                     ambiente[linha - 1][coluna] = macaco;
                     ambiente[linha][coluna] = null;
-
                     macaco.setPosicaoLinha(linha - 1);
-                    System.out.println("Foi para cima");
+
+                    System.out.println("Antes: " + linha + coluna + " Foi para cima: " + macaco.getPosicaoLinha() + coluna);
                     //verifica se esta no goal
                     if (goal()) {
                         System.out.println("SUCESSO");
@@ -114,6 +117,7 @@ public class Sala {
                         //se nao estiver na posicao posiciona a cadeira
                         if (macaco.isCadeiraPosicao() == false) {
                             ambiente[4][2] = cadeira;
+                            ambiente[linha - 1][coluna] = null;
                             macaco.setCadeiraPosicao(true);
                         }
                         //testa goal()
@@ -123,6 +127,7 @@ public class Sala {
                     } else {
                         //pega vara e depois verifica goal
                         macaco.setVara(vara);
+                        ambiente[linha -1][coluna] = null;
                         if (goal()) {
                             System.out.println("SUCESSO");
                         }
@@ -131,11 +136,15 @@ public class Sala {
             }
         } else {
             System.out.println("Na posicao: " + linha + "" + coluna + " Nao pode ir para cima");
+            retorno = false;
         }
+
+        return retorno;
     }
 
     //Baixo()
-    public void baixo() {
+    public boolean baixo() {
+        boolean retorno = true;
         int linha = macaco.getPosicaoLinha();
         int coluna = macaco.getPosicaoColuna();
 
@@ -153,7 +162,7 @@ public class Sala {
                     ambiente[linha][coluna] = null;
                     macaco.setPosicaoLinha(linha + 1);
 
-                    System.out.println("Foi para baixo");
+                    System.out.println("Antes: " + linha + coluna + " Foi para baixo: " + macaco.getPosicaoLinha() + coluna);
                     if (goal()) {
                         System.out.println("SUCESSO");
                     }
@@ -164,6 +173,7 @@ public class Sala {
                         //se nao estiver na posicao posiciona a cadeira
                         if (macaco.isCadeiraPosicao() == false) {
                             ambiente[4][2] = cadeira;
+                            ambiente[linha + 1][coluna] = null;
                             macaco.setCadeiraPosicao(true);
                             ambiente[linha][coluna] = null;
                             ambiente[linha + 1][coluna] = macaco;
@@ -173,6 +183,7 @@ public class Sala {
                         }
                     } else {
                         macaco.setVara(vara);
+                        ambiente[linha + 1][coluna] = null;
                         if (goal()) {
                             System.out.println("SUCESSO");
                         }
@@ -181,11 +192,15 @@ public class Sala {
             }
         } else {
             System.out.println("Na posicao: " + linha + "" + coluna + " Nao pode ir para baixo");
+            retorno = false;
+
         }
+        return retorno;
     }
 
     //Direita()
-    public void direita() {
+    public boolean direita() {
+        boolean retorno = true;
         int linha = macaco.getPosicaoLinha();
         int coluna = macaco.getPosicaoColuna();
 
@@ -195,7 +210,6 @@ public class Sala {
 
         //so va a direita se nao estiver na coluna 4
         if (macaco.getPosicaoColuna() != 4) {
-
             //verificar se a proxima coluna eh diferente da anterior
             if (coluna + 1 != macaco.getColunaAnterior()) {
                 //tenta ir verificando se esta vazia
@@ -204,7 +218,7 @@ public class Sala {
                     macaco.setPosicaoColuna(coluna + 1);
                     ambiente[linha][coluna] = null;
 
-                    System.out.println("Foi para direita");
+                    System.out.println("Antes: " + linha + coluna + " Foi para direita: " + linha + macaco.getPosicaoColuna());
                     if (goal()) {
                         System.out.println("SUCESSO");
                     }
@@ -215,6 +229,7 @@ public class Sala {
                         //se nao estiver na posicao posiciona a cadeira
                         if (macaco.isCadeiraPosicao() == false) {
                             ambiente[4][2] = cadeira;
+                            ambiente[linha][coluna + 1] = null;
                             macaco.setCadeiraPosicao(true);
                             ambiente[linha][coluna] = null;
                             ambiente[linha][coluna + 1] = macaco;
@@ -224,6 +239,7 @@ public class Sala {
                         }
                     } else {
                         macaco.setVara(vara);
+                        ambiente[linha][coluna + 1] = null;
                         if (goal()) {
                             System.out.println("SUCESSO");
                         }
@@ -234,11 +250,15 @@ public class Sala {
 
         } else {
             System.out.println("Na posicao: " + linha + "" + coluna + " Nao pode ir para direita");
+            retorno = false;
         }
+
+        return retorno;
     }
 
     //Esquerda()
-    public void esquerda() {
+    public boolean esquerda() {
+        boolean retorno = true;
         int linha = macaco.getPosicaoLinha();
         int coluna = macaco.getPosicaoColuna();
 
@@ -256,52 +276,88 @@ public class Sala {
                     macaco.setPosicaoColuna(coluna - 1);
                     ambiente[linha][coluna] = null;
 
-                    System.out.println("Foi para esquerda");
-                    System.out.println("===Nova posicao===");
-                    System.out.println("");
-                    ambiente();
+                    System.out.println("Antes: " + linha + coluna + " Foi para esquerda: " + linha + macaco.getPosicaoColuna());
+                    if (goal()) {
+                        System.out.println("SUCESSO");
+                    }
 
                 } else {
                     //caso nao esteja vazio, ver o que tem e pegar
                     if (ambiente[linha][coluna - 1].toString() == "CADEIRA") {
-                        macaco.setCadeira(cadeira);
+                        //se nao estiver na posicao posiciona a cadeira
+                        if (macaco.isCadeiraPosicao() == false) {
+                            ambiente[linha][coluna - 1] = null;
+                            ambiente[4][2] = cadeira;
+                            macaco.setCadeiraPosicao(true);
+                            ambiente[linha][coluna] = null;
+                            ambiente[linha][coluna - 1] = macaco;
+                        }
+                        if (goal()) {
+                            System.out.println("SUCESSO");
+                        }
                     } else {
                         macaco.setVara(vara);
-                    }
-                    if (goal()) {
-                        System.out.println("Objetivo alcancado");
+                        ambiente[linha][coluna - 1] = null;
+                        if (goal()) {
+                            System.out.println("SUCESSO");
+                        }
                     }
                 }
             }
         } else {
-            System.out.println("Nao pode ir a esquerda");
+            System.out.println("Na posicao: " + linha + "" + coluna + " Nao pode ir para direita");
+            retorno = false;
         }
+        return retorno;
     }
 
     //Verificar posicao
     //Verificar se é goal
     public boolean goal() {
         if ((macaco.getPosicaoLinha() == 3) && (macaco.getPosicaoColuna() == 2) && (macaco.getVara() != null) && (macaco.isCadeiraPosicao() == true)) {
+            sucesso = true;
+            System.out.println("");
+            System.out.println("");
+            ambiente();
+            System.out.println("");
             return true;
         }
         return false;
+    }
+
+    public void escolherMovimento() {
+        int lado = r.nextInt((4 - 1) + 1) + 1;
+        boolean retorno = true;
+        if (lado == 1) {
+            retorno = esquerda();
+            if (retorno == false) {
+                escolherMovimento();
+            }
+        } else if (lado == 2) {
+            retorno = cima();
+            if (retorno == false) {
+                escolherMovimento();
+            }
+        } else if (lado == 3) {
+            retorno = direita();
+            if (retorno == false) {
+                escolherMovimento();
+            }
+        } else {
+            retorno = baixo();
+            if (retorno == false) {
+                escolherMovimento();
+            }
+        }
     }
 
     public void verificarPosicao() {
         if (goal()) {
             System.out.println("Objetivo alcancado");
         } else {
-
-            //cima
-            cima();
-            //baixo
-            baixo();
-            //direita
-            direita();
-
-            //esquerda
-            esquerda();
-
+            while (sucesso == false) {
+                escolherMovimento();
+            }
         }
     }
 
@@ -311,10 +367,8 @@ public class Sala {
 
         ambiente[0][2] = banana;
         posicaoInicial();
-        System.out.println("V=========ANTES============V");
         ambiente();
-        System.out.println("V==========DEPOIS==========V");
-        System.out.println("");
+
         verificarPosicao();
 
     }
